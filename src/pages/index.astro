@@ -49,14 +49,14 @@ import Layout from '../layouts/Layout.astro';
       </h1>
       
       <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-        Browse verified applications ready to deploy on ThreeFold Grid with a single command.
+        Browse verified applications ready to deploy on ThreeFold Grid. CLI integration coming in v0.10.0.
       </p>
 
       <!-- Code Example -->
       <div class="max-w-xl mx-auto mb-12">
         <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6 text-left">
-          <pre class="text-gray-300 font-mono text-sm"><code><span class="text-gray-500"># Browse, discover, deploy</span>
-<span class="text-purple-400">tfgrid-compose</span> <span class="text-indigo-400">search</span>
+          <pre class="text-gray-300 font-mono text-sm"><code><span class="text-gray-500"># Browse apps on registry.tfgrid.studio</span>
+<span class="text-gray-500"># Then deploy (v0.10.0+)</span>
 <span class="text-purple-400">tfgrid-compose</span> <span class="text-indigo-400">up</span> tfgrid-ai-agent
 
 <span class="text-gray-500"># That's it! 🎉</span></code></pre>
@@ -198,20 +198,28 @@ import Layout from '../layouts/Layout.astro';
     const officialSection = yaml.match(/official:([\s\S]*?)(?=verified:|metadata:|$)/)?.[1] || '';
     const verifiedSection = yaml.match(/verified:([\s\S]*?)(?=metadata:|$)/)?.[1] || '';
     
-    // Parse official apps
-    const officialMatches = officialSection.matchAll(/- name: ([\s\S]*?)(?=- name:|verified:|metadata:|$)/g);
+    // Parse official apps (skip commented lines)
+    const officialMatches = officialSection.matchAll(/(?:^|\n)\s*- name: ([\s\S]*?)(?=\n\s*- name:|\n\s*verified:|\n\s*metadata:|$)/g);
     for (const match of officialMatches) {
-      const appText = match[1];
-      const app = parseApp(appText, 'official');
-      if (app) apps.push(app);
+      const fullMatch = match[0];
+      // Skip if line starts with # (commented)
+      if (!fullMatch.trim().startsWith('#')) {
+        const appText = match[1];
+        const app = parseApp(appText, 'official');
+        if (app) apps.push(app);
+      }
     }
     
-    // Parse verified apps (if any)
-    const verifiedMatches = verifiedSection.matchAll(/- name: ([\s\S]*?)(?=- name:|metadata:|$)/g);
+    // Parse verified apps (skip commented lines)
+    const verifiedMatches = verifiedSection.matchAll(/(?:^|\n)\s*- name: ([\s\S]*?)(?=\n\s*- name:|\n\s*metadata:|$)/g);
     for (const match of verifiedMatches) {
-      const appText = match[1];
-      const app = parseApp(appText, 'verified');
-      if (app && !appText.trim().startsWith('#')) apps.push(app);
+      const fullMatch = match[0];
+      // Skip if line starts with # (commented)
+      if (!fullMatch.trim().startsWith('#')) {
+        const appText = match[1];
+        const app = parseApp(appText, 'verified');
+        if (app) apps.push(app);
+      }
     }
     
     return apps;
