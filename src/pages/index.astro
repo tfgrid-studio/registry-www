@@ -1,0 +1,367 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="TFGrid App Registry">
+  <!-- Hero Section -->
+  <div class="relative overflow-hidden border-b border-gray-800">
+    <!-- Background gradient -->
+    <div class="absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-purple-900/20 to-pink-900/20"></div>
+    
+    <!-- Navigation -->
+    <nav class="relative border-b border-gray-800/50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-6">
+          <div class="flex items-center space-x-3">
+            <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+            <div>
+              <div class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+                TFGrid Registry
+              </div>
+              <div class="text-xs text-gray-500">Deploy apps by name</div>
+            </div>
+          </div>
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="https://docs.tfgrid.studio" class="text-gray-300 hover:text-white transition">Documentation</a>
+            <a href="https://github.com/tfgrid-studio/app-registry" class="text-gray-300 hover:text-white transition">GitHub</a>
+            <a href="https://tfgrid.studio" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg transition font-medium">Get Started</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Content -->
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+      <div class="inline-block mb-6 px-4 py-2 bg-indigo-600/20 border border-indigo-500/50 rounded-full">
+        <span class="text-indigo-400 font-semibold">Official App Registry</span>
+      </div>
+      
+      <h1 class="text-5xl md:text-6xl font-black tracking-tight mb-6">
+        <span class="text-white">
+          Deploy Apps by Name.
+        </span>
+        <br />
+        <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          Like Docker. Simple.
+        </span>
+      </h1>
+      
+      <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+        Browse verified applications ready to deploy on ThreeFold Grid with a single command.
+      </p>
+
+      <!-- Code Example -->
+      <div class="max-w-xl mx-auto mb-12">
+        <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6 text-left">
+          <pre class="text-gray-300 font-mono text-sm"><code><span class="text-gray-500"># Browse, discover, deploy</span>
+<span class="text-purple-400">tfgrid-compose</span> <span class="text-indigo-400">search</span>
+<span class="text-purple-400">tfgrid-compose</span> <span class="text-indigo-400">up</span> tfgrid-ai-agent
+
+<span class="text-gray-500"># That's it! 🎉</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-3 gap-4 max-w-2xl mx-auto">
+        <div class="bg-gray-900/30 border border-gray-800 rounded-lg p-4">
+          <div class="text-3xl font-bold text-indigo-400" id="total-apps">-</div>
+          <div class="text-sm text-gray-400">Total Apps</div>
+        </div>
+        <div class="bg-gray-900/30 border border-gray-800 rounded-lg p-4">
+          <div class="text-3xl font-bold text-green-400" id="official-apps">-</div>
+          <div class="text-sm text-gray-400">Official</div>
+        </div>
+        <div class="bg-gray-900/30 border border-gray-800 rounded-lg p-4">
+          <div class="text-3xl font-bold text-purple-400" id="verified-apps">-</div>
+          <div class="text-sm text-gray-400">Verified</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search & Filter -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="flex flex-col md:flex-row gap-4 mb-8">
+      <!-- Search -->
+      <div class="flex-1 relative">
+        <input
+          type="text"
+          id="search"
+          placeholder="Search apps..."
+          class="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 pl-12 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition"
+        />
+        <svg class="w-5 h-5 text-gray-500 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+
+      <!-- Filter by Pattern -->
+      <select
+        id="pattern-filter"
+        class="bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition"
+      >
+        <option value="">All Patterns</option>
+        <option value="single-vm">Single VM</option>
+        <option value="gateway">Gateway</option>
+        <option value="k3s">K3s</option>
+      </select>
+
+      <!-- Filter by Status -->
+      <select
+        id="status-filter"
+        class="bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition"
+      >
+        <option value="">All Status</option>
+        <option value="production">Production</option>
+        <option value="beta">Beta</option>
+      </select>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+      <p class="mt-4 text-gray-400">Loading apps...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error" class="hidden text-center py-12">
+      <div class="text-red-400 text-xl mb-2">❌ Failed to load apps</div>
+      <p class="text-gray-400">Check console for details</p>
+    </div>
+
+    <!-- Apps Grid -->
+    <div id="apps-grid" class="hidden grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Apps will be injected here -->
+    </div>
+
+    <!-- No Results -->
+    <div id="no-results" class="hidden text-center py-12">
+      <div class="text-gray-400 text-xl mb-2">🔍 No apps found</div>
+      <p class="text-gray-500">Try adjusting your search or filters</p>
+    </div>
+  </div>
+
+  <!-- Submit App CTA -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="bg-gradient-to-r from-indigo-900/30 to-purple-900/30 border border-indigo-500/50 rounded-2xl p-8 md:p-12 text-center">
+      <h2 class="text-3xl font-bold mb-4">Want to share your app?</h2>
+      <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+        Submit your application to the TFGrid Registry and make it available to the community.
+      </p>
+      <a
+        href="https://github.com/tfgrid-studio/app-registry/blob/main/docs/submit-app.md"
+        class="inline-block px-8 py-4 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold text-lg transition transform hover:scale-105"
+      >
+        Submit Your App →
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-800 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
+      <p>TFGrid Studio Registry • Apache 2.0 License • Copyright 2025 ThreeFold</p>
+      <p class="mt-2">
+        <a href="https://tfgrid.studio" class="hover:text-gray-300 transition">TFGrid Studio</a> •
+        <a href="https://docs.tfgrid.studio" class="hover:text-gray-300 transition ml-4">Documentation</a> •
+        <a href="https://github.com/tfgrid-studio/app-registry" class="hover:text-gray-300 transition ml-4">GitHub</a>
+      </p>
+    </div>
+  </footer>
+</Layout>
+
+<script>
+  // Fetch apps from GitHub
+  const REGISTRY_URL = 'https://raw.githubusercontent.com/tfgrid-studio/app-registry/main/registry/apps.yaml';
+
+  let allApps = [];
+
+  async function fetchApps() {
+    try {
+      const response = await fetch(REGISTRY_URL);
+      const yamlText = await response.text();
+      
+      // Simple YAML parser for our specific format
+      const apps = parseAppsYaml(yamlText);
+      
+      return apps;
+    } catch (error) {
+      console.error('Failed to fetch apps:', error);
+      throw error;
+    }
+  }
+
+  function parseAppsYaml(yaml) {
+    const apps = [];
+    const officialSection = yaml.match(/official:([\s\S]*?)(?=verified:|metadata:|$)/)?.[1] || '';
+    const verifiedSection = yaml.match(/verified:([\s\S]*?)(?=metadata:|$)/)?.[1] || '';
+    
+    // Parse official apps
+    const officialMatches = officialSection.matchAll(/- name: ([\s\S]*?)(?=- name:|verified:|metadata:|$)/g);
+    for (const match of officialMatches) {
+      const appText = match[1];
+      const app = parseApp(appText, 'official');
+      if (app) apps.push(app);
+    }
+    
+    // Parse verified apps (if any)
+    const verifiedMatches = verifiedSection.matchAll(/- name: ([\s\S]*?)(?=- name:|metadata:|$)/g);
+    for (const match of verifiedMatches) {
+      const appText = match[1];
+      const app = parseApp(appText, 'verified');
+      if (app && !appText.trim().startsWith('#')) apps.push(app);
+    }
+    
+    return apps;
+  }
+
+  function parseApp(text, type) {
+    const name = text.match(/^(\S+)/)?.[1];
+    if (!name) return null;
+    
+    const repo = text.match(/repo: (.+)/)?.[1]?.trim();
+    const description = text.match(/description: (.+)/)?.[1]?.trim();
+    const pattern = text.match(/pattern: (\S+)/)?.[1];
+    const status = text.match(/status: (\S+)/)?.[1];
+    const version = text.match(/version: (\S+)/)?.[1];
+    const tagsMatch = text.match(/tags:\s*\n([\s\S]*?)(?=\n\s*\w+:|$)/);
+    const tags = tagsMatch ? tagsMatch[1].match(/- (\S+)/g)?.map(t => t.substring(2)) || [] : [];
+    
+    return {
+      name,
+      repo,
+      description,
+      pattern,
+      status,
+      version,
+      tags,
+      type,
+    };
+  }
+
+  function renderApp(app) {
+    const statusColor = app.status === 'production' ? 'green' : app.status === 'beta' ? 'orange' : 'gray';
+    const typeColor = app.type === 'official' ? 'indigo' : 'purple';
+    
+    return `
+      <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6 hover:border-${typeColor}-500/50 transition group">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <h3 class="text-xl font-bold text-white group-hover:text-${typeColor}-400 transition">${app.name}</h3>
+              ${app.type === 'official' ? '<span class="text-xs px-2 py-1 bg-indigo-600 rounded text-white font-semibold">Official</span>' : ''}
+            </div>
+            <p class="text-gray-400 text-sm mb-3">${app.description || 'No description'}</p>
+          </div>
+        </div>
+        
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="text-xs px-2 py-1 bg-${statusColor}-600/20 text-${statusColor}-400 rounded border border-${statusColor}-500/30">
+            ${app.status}
+          </span>
+          <span class="text-xs px-2 py-1 bg-gray-800 text-gray-400 rounded">
+            ${app.pattern}
+          </span>
+          ${app.tags?.slice(0, 3).map(tag => 
+            `<span class="text-xs px-2 py-1 bg-gray-800 text-gray-500 rounded">${tag}</span>`
+          ).join('') || ''}
+        </div>
+        
+        <div class="flex gap-2">
+          <button
+            onclick="copyDeployCommand('${app.name}')"
+            class="flex-1 px-4 py-2 bg-${typeColor}-600 hover:bg-${typeColor}-700 rounded-lg font-medium transition text-sm"
+          >
+            Copy Deploy Command
+          </button>
+          <a
+            href="https://github.com/${app.repo}"
+            target="_blank"
+            class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition text-sm flex items-center gap-2"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.840 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            View
+          </a>
+        </div>
+      </div>
+    `;
+  }
+
+  function filterApps() {
+    const searchQuery = document.getElementById('search').value.toLowerCase();
+    const patternFilter = document.getElementById('pattern-filter').value;
+    const statusFilter = document.getElementById('status-filter').value;
+    
+    const filtered = allApps.filter(app => {
+      const matchesSearch = !searchQuery || 
+        app.name.toLowerCase().includes(searchQuery) ||
+        app.description?.toLowerCase().includes(searchQuery) ||
+        app.tags?.some(tag => tag.toLowerCase().includes(searchQuery));
+      
+      const matchesPattern = !patternFilter || app.pattern === patternFilter;
+      const matchesStatus = !statusFilter || app.status === statusFilter;
+      
+      return matchesSearch && matchesPattern && matchesStatus;
+    });
+    
+    const grid = document.getElementById('apps-grid');
+    const noResults = document.getElementById('no-results');
+    
+    if (filtered.length === 0) {
+      grid.classList.add('hidden');
+      noResults.classList.remove('hidden');
+    } else {
+      grid.classList.remove('hidden');
+      noResults.classList.add('hidden');
+      grid.innerHTML = filtered.map(renderApp).join('');
+    }
+  }
+
+  window.copyDeployCommand = function(appName) {
+    const command = `tfgrid-compose up ${appName}`;
+    navigator.clipboard.writeText(command);
+    
+    // Show toast (simple alert for now)
+    alert(`Copied: ${command}`);
+  };
+
+  // Initialize
+  async function init() {
+    const loading = document.getElementById('loading');
+    const error = document.getElementById('error');
+    const grid = document.getElementById('apps-grid');
+    
+    try {
+      allApps = await fetchApps();
+      
+      // Update stats
+      const official = allApps.filter(a => a.type === 'official').length;
+      const verified = allApps.filter(a => a.type === 'verified').length;
+      
+      document.getElementById('total-apps').textContent = allApps.length;
+      document.getElementById('official-apps').textContent = official;
+      document.getElementById('verified-apps').textContent = verified;
+      
+      // Render apps
+      loading.classList.add('hidden');
+      filterApps();
+      
+      // Setup event listeners
+      document.getElementById('search').addEventListener('input', filterApps);
+      document.getElementById('pattern-filter').addEventListener('change', filterApps);
+      document.getElementById('status-filter').addEventListener('change', filterApps);
+      
+    } catch (err) {
+      loading.classList.add('hidden');
+      error.classList.remove('hidden');
+      console.error('Error loading apps:', err);
+    }
+  }
+
+  // Run on load
+  init();
+</script>
