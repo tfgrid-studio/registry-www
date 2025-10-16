@@ -132,7 +132,7 @@ import Layout from '../layouts/Layout.astro';
     </div>
 
     <!-- Apps Grid -->
-    <div id="apps-grid" class="hidden grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div id="apps-grid" class="hidden grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
       <!-- Apps will be injected here -->
     </div>
 
@@ -314,7 +314,7 @@ import Layout from '../layouts/Layout.astro';
     const typeColor = app.type === 'official' ? 'indigo' : 'purple';
     
     return `
-      <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6 hover:border-${typeColor}-500/50 transition group">
+      <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6 hover:border-${typeColor}-500/50 transition group flex flex-col h-full">
         <div class="flex items-start justify-between mb-4">
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
@@ -325,7 +325,7 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
         
-        <div class="flex flex-wrap gap-2 mb-4">
+        <div class="flex flex-wrap gap-2 mb-4 min-h-[32px]">
           <span class="text-xs px-2 py-1 bg-${statusColor}-600/20 text-${statusColor}-400 rounded border border-${statusColor}-500/30">
             ${app.status}
           </span>
@@ -335,9 +335,10 @@ import Layout from '../layouts/Layout.astro';
           ${app.tags?.slice(0, 3).map(tag => 
             `<span class="text-xs px-2 py-1 bg-gray-800 text-gray-500 rounded">${tag}</span>`
           ).join('') || ''}
+          ${app.tags?.length > 3 ? `<span class="text-xs px-2 py-1 bg-gray-800 text-gray-500 rounded">+${app.tags.length - 3} more</span>` : ''}
         </div>
         
-        <div class="flex gap-2">
+        <div class="flex gap-2 mt-auto">
           <button
             onclick="copyDeployCommand('${app.name}')"
             class="flex-1 px-4 py-2 bg-${typeColor}-600 hover:bg-${typeColor}-700 rounded-lg font-medium transition text-sm"
