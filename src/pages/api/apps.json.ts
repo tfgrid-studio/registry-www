@@ -30,12 +30,22 @@ export async function GET() {
 
 function parseAppsYaml(yaml: string) {
   const apps: any[] = [];
-  const officialSection = yaml.match(/official:([\s\S]*?)(?=verified:|metadata:|$)/)?.[1] || '';
+  const officialSection = yaml.match(/official:([\s\S]*?)(?=community:|metadata:|$)/)?.[1] || '';
+  const communitySection = yaml.match(/community:([\s\S]*?)(?=metadata:|$)/)?.[1] || '';
   
-  const officialMatches = officialSection.matchAll(/- name: ([\s\S]*?)(?=- name:|verified:|metadata:|$)/g);
+  // Parse official apps
+  const officialMatches = officialSection.matchAll(/- name: ([\s\S]*?)(?=- name:|community:|metadata:|$)/g);
   for (const match of officialMatches) {
     const appText = match[1];
     const app = parseApp(appText, 'official');
+    if (app) apps.push(app);
+  }
+  
+  // Parse community apps
+  const communityMatches = communitySection.matchAll(/- name: ([\s\S]*?)(?=- name:|metadata:|$)/g);
+  for (const match of communityMatches) {
+    const appText = match[1];
+    const app = parseApp(appText, 'community');
     if (app) apps.push(app);
   }
   
