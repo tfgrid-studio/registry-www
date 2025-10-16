@@ -49,7 +49,7 @@ import Layout from '../layouts/Layout.astro';
       </h1>
       
       <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-        Browse verified applications ready to deploy on ThreeFold Grid. CLI integration coming in v0.10.0.
+        Browse official and community applications ready to deploy on ThreeFold Grid. CLI integration coming in v0.10.0.
       </p>
 
       <!-- Code Example -->
@@ -74,8 +74,8 @@ import Layout from '../layouts/Layout.astro';
           <div class="text-sm text-gray-400">Official</div>
         </div>
         <div class="bg-gray-900/30 border border-gray-800 rounded-lg p-4">
-          <div class="text-3xl font-bold text-purple-400" id="verified-apps">-</div>
-          <div class="text-sm text-gray-400">Verified</div>
+          <div class="text-3xl font-bold text-purple-400" id="community-apps">-</div>
+          <div class="text-sm text-gray-400">Community</div>
         </div>
       </div>
     </div>
@@ -203,7 +203,7 @@ import Layout from '../layouts/Layout.astro';
           <h4 class="font-bold text-green-400">Registry</h4>
         </div>
         <p class="text-sm text-gray-500">registry.tfgrid.studio</p>
-        <p class="text-xs text-gray-600 mt-2">Browse verified apps</p>
+        <p class="text-xs text-gray-600 mt-2">Browse official & community apps</p>
       </div>
 
       <!-- Docs -->
@@ -255,11 +255,11 @@ import Layout from '../layouts/Layout.astro';
 
   function parseAppsYaml(yaml) {
     const apps = [];
-    const officialSection = yaml.match(/official:([\s\S]*?)(?=verified:|metadata:|$)/)?.[1] || '';
-    const verifiedSection = yaml.match(/verified:([\s\S]*?)(?=metadata:|$)/)?.[1] || '';
+    const officialSection = yaml.match(/official:([\s\S]*?)(?=community:|metadata:|$)/)?.[1] || '';
+    const communitySection = yaml.match(/community:([\s\S]*?)(?=metadata:|$)/)?.[1] || '';
     
     // Parse official apps (skip commented lines)
-    const officialMatches = officialSection.matchAll(/(?:^|\n)\s*- name: ([\s\S]*?)(?=\n\s*- name:|\n\s*verified:|\n\s*metadata:|$)/g);
+    const officialMatches = officialSection.matchAll(/(?:^|\n)\s*- name: ([\s\S]*?)(?=\n\s*- name:|\n\s*community:|\n\s*metadata:|$)/g);
     for (const match of officialMatches) {
       const fullMatch = match[0];
       // Skip if line starts with # (commented)
@@ -270,14 +270,14 @@ import Layout from '../layouts/Layout.astro';
       }
     }
     
-    // Parse verified apps (skip commented lines)
-    const verifiedMatches = verifiedSection.matchAll(/(?:^|\n)\s*- name: ([\s\S]*?)(?=\n\s*- name:|\n\s*metadata:|$)/g);
-    for (const match of verifiedMatches) {
+    // Parse community apps (skip commented lines)
+    const communityMatches = communitySection.matchAll(/(?:^|\n)\s*- name: ([\s\S]*?)(?=\n\s*- name:|\n\s*metadata:|$)/g);
+    for (const match of communityMatches) {
       const fullMatch = match[0];
       // Skip if line starts with # (commented)
       if (!fullMatch.trim().startsWith('#')) {
         const appText = match[1];
-        const app = parseApp(appText, 'verified');
+        const app = parseApp(appText, 'community');
         if (app) apps.push(app);
       }
     }
@@ -426,11 +426,11 @@ import Layout from '../layouts/Layout.astro';
       
       // Update stats
       const official = allApps.filter(a => a.type === 'official').length;
-      const verified = allApps.filter(a => a.type === 'verified').length;
+      const community = allApps.filter(a => a.type === 'community').length;
       
       document.getElementById('total-apps').textContent = allApps.length;
       document.getElementById('official-apps').textContent = official;
-      document.getElementById('verified-apps').textContent = verified;
+      document.getElementById('community-apps').textContent = community;
       
       // Render apps
       loading.classList.add('hidden');

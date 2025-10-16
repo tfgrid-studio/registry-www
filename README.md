@@ -11,7 +11,7 @@
 
 - 🎨 **Beautiful UI** - Modern, responsive design
 - 🔍 **Search & Filter** - Find apps by name, tags, pattern, or status
-- 📊 **Live Stats** - Total apps, official, and verified counts
+- 📊 **Live Stats** - Total apps, official, and community counts (computed dynamically)
 - 📋 **App Cards** - Detailed information for each app
 - 📱 **Mobile-Friendly** - Works on all devices
 - 🚀 **Fast** - Static site generated with Astro
