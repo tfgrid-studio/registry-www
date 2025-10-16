@@ -335,7 +335,7 @@ import Layout from '../layouts/Layout.astro';
           ${app.tags?.slice(0, 3).map(tag => 
             `<span class="text-xs px-2 py-1 bg-gray-800 text-gray-500 rounded">${tag}</span>`
           ).join('') || ''}
-          ${app.tags?.length > 3 ? `<span class="text-xs px-2 py-1 bg-gray-800 text-gray-500 rounded">+${app.tags.length - 3} more</span>` : ''}
+          ${app.tags?.length > 3 ? `<span class="text-xs px-2 py-1 bg-gray-800 text-gray-400 rounded cursor-help" title="${app.tags.slice(3).join(', ')}">+${app.tags.length - 3} more</span>` : ''}
         </div>
         
         <div class="flex gap-2 mt-auto">
